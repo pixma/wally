@@ -1,0 +1,14 @@
+
+body{
+	background-color: #56A404;
+}
+
+nav{
+	-webkit-box-shadow: 0 0 12px 3px #000000;
+	box-shadow: 0 0 12px 3px #000000;
+}
+
+#frontBanner{
+	margin-top: 12%;
+	margin-bottom:12%;
+}
