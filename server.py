@@ -6,6 +6,70 @@ import tornado.httpserver
 import tornado.websocket
 import tornado.ioloop
 import tornado.web
+import pymongo
+from datetime import datetime
+import hashlib
+import sys
+
+
+
+class SignUpHandler( tornado.web.RequestHandler ):
+	def get(self):
+		self.render('signup.html', title='Wally : Sign Up')
+		
+	def post(self):
+		try:
+			userName = self.get_argument( "email" )
+			password = self.get_argument( "password" )
+			firstName = self.get_argument( "firstName" )
+			lastName = self.get_argument( "lastName" )
+			conn = pymongo.Connection()
+			db = conn.wally
+			collection = db.userCollection
+			## check it email already exist or not
+			## if not exist then proceed.
+			hashOutput = hashlib.md5( userName.encode() )
+			ownerId = hashOutput.hexdigest()
+			document = {"entrytype" : "signUp",
+						"author" : userName,
+						"userName": userName,
+						"passwd": password,
+						"firstName" : firstName,
+						"lastName" : lastName,
+						"OwnerID" : ownerId,
+						"TS" : datetime.utcnow()}
+			objectId = collection.insert( document )
+			conn.close()
+			self.write({"success":True})#response
+			#completion of insertion and creation of new user.
+		except:
+			print "Unexpected error: ", sys.exc_info()
+
+class SignInHandler( tornado.web.RequestHandler ):
+	def get(self):
+		self.write( "<head> <script>window.location.replace(\"/\"); </script> </head>" );
+	
+	def post(self):
+		user = self.get_argument( "email" )
+		passwd = self.get_argument( "password" )
+		conn = pymongo.Connection()
+		db = conn.wally
+		collection = db.userCollection
+		
+		if( collection.find({'userName':{'$eq':user},'passwd':{'$eq':passwd}}).count() != 1 ):
+			self.write( { "LogIn":False } )
+			return
+
+		collection = db.userActivity
+		document = {
+					"entrytype":"userActivity",
+					"status":"Online",
+					"userName":user,
+					"TS":datetime.utcnow()}
+		objId = collection.insert( document )
+		conn.close()
+		self.write({"LogIn":True})
+
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
@@ -25,7 +89,10 @@ application = tornado.web.Application([
     (r"/", MainHandler),
 	(r"/static/styles/(.*)", tornado.web.StaticFileHandler, {"path" : "./public/styles"},),
 	(r"/static/images/(.*)", tornado.web.StaticFileHandler, {"path" : "./public/images"},),
+	(r"/static/scripts/(.*)", tornado.web.StaticFileHandler, {"path" : "./public/script"},),
 	(r"/ws", WebSocketHandler),
+	(r"/signUp/", SignUpHandler),
+	(r"/signIn/", SignInHandler),
 ], debug=True, template_path='views')
 
 if __name__ == "__main__":
