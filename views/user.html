@@ -1,0 +1,137 @@
+<html>
+
+<head>
+	
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		
+		<title>
+			{{ title }}
+		</title>
+		
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+		
+		<link rel="stylesheet" href="/static/styles/user.css">
+		
+		
+		
+		
+	</head>
+
+<body>
+	
+	<div class="container">
+		<nav class="navbar navbar-default" role="navigation">
+		  <div class="container-fluid">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+			  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			  </button>
+			  <a class="navbar-brand" href="/">Wally</a>
+			</div>
+
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			  <ul class="nav navbar-nav">
+				<li class="active"><a href="/">Home</a></li>
+				<li><a href="#">About Us</a></li>				
+			  </ul>
+			  <ul class="nav navbar-nav navbar-right">
+				<li class="dropdown">
+				  <a href="#" class="dropdown-toggle" data-toggle="dropdown"> {{ nickName }} <span class="caret"></span></a>
+				  <ul class="dropdown-menu" role="menu">
+					<li><a href="#">Account Settings</a></li>
+					<li><a href="#">Device Management</a></li>
+					<li class="divider"></li>
+					<li><a href="#">Sign Out</a></li>
+				  </ul>
+				</li>							
+			  </ul>
+			</div><!-- /.navbar-collapse -->
+		  </div><!-- /.container-fluid -->
+		</nav>
+		
+		<div class="row">
+		
+		<div class="col-md-5">
+			<div class="panel panel-default">
+			  <div class="panel-heading">
+				<h3 class="panel-title">Add New Device</h3>
+			  </div>
+			  <div class="panel-body">
+				
+				<div class="input-group input-group-md">
+				  <span class="input-group-addon">Device ID</span>
+				  <input type="text" class="form-control" placeholder="xxxx-xxxx-xx-xx">
+				</div>
+				<br>
+				<div class="input-group input-group-md">
+				  <span class="input-group-addon">Mac Address</span>
+				  <input type="text" class="form-control" placeholder="xx-xx-xx-xx-xx-xx">
+				</div>
+				<br>
+				<div class="input-group input-group-md">
+				  <span class="input-group-addon">Device Name</span>
+				  <input type="text" class="form-control" placeholder="Ex. RemoScope.">
+				</div>
+				
+			  </div>
+			  <div class="panel-footer">
+				<center>
+					<p>
+					  <button type="button" class="btn btn-default btn-md">ADD</button>
+					</p>
+				</center>
+			  </div>
+			</div>
+		</div>
+		
+		<div class="col-md-7">
+			<div class="panel panel-default">
+			  <div class="panel-heading">
+				<h3 class="panel-title">Your Devices</h3>
+			  </div>
+			  <div class="panel-body">
+				<ul class="nav nav-pills nav-stacked">
+				
+				  <li class="active">
+					<a href="#">
+					  <span class="badge pull-right">Online</span>
+					  [Device Name]
+					</a>
+				  </li>
+				
+				</ul>
+			  </div>
+			  <div class="panel-footer">
+				<center>
+					<p>
+					  <button type="button" class="btn btn-default btn-md">Refresh</button>
+					</p>
+				</center>
+			  </div>
+			</div>
+		</div>		  
+		  
+		</div>
+		
+		
+	</div>
+		
+		
+	
+	
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<script src="/static/scripts/user.js" > </script>
+	
+</body>
+
+</html>

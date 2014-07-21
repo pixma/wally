@@ -56,8 +56,9 @@ class SignInHandler( tornado.web.RequestHandler ):
 		db = conn.wally
 		collection = db.userCollection
 		
-		if( collection.find({'userName':{'$eq':user},'passwd':{'$eq':passwd}}).count() != 1 ):
+		if( collection.find({'userName':user,'passwd':passwd}).count() != 1 ):
 			self.write( { "LogIn":False } )
+			conn.close()
 			return
 
 		collection = db.userActivity
@@ -69,6 +70,37 @@ class SignInHandler( tornado.web.RequestHandler ):
 		objId = collection.insert( document )
 		conn.close()
 		self.write({"LogIn":True})
+
+class UserDashboardHandler( tornado.web.RequestHandler ):
+	def get(self, userNickName):
+		self.render( 'user.html', title = 'Wally : Home', nickName = userNickName )
+
+class DeviceAddHandler( tornado.web.Requesthandler ):
+	def post( self ):
+		ownerName = self.get_argument( "userName" )
+		devId = self.get_argument( "devId" )
+		devMacAddr = self.get_argument( "devMacAddr" )
+		devNickName = self.get_argument( "devNickName" )
+		ownerId = self.get_argument( "ownerID" )
+		#Now connect to DB and log this into DB.
+		conn = pymongo.Connection()
+		db = conn.wally
+		collection = db.devCollection
+		document = {"Owner ID" : ownerId,
+					"Device ID" : devId,
+					"Device Mac Addr" : devMacAddr,
+					"Device Name" : devNickName}
+		objIdentity = collection.insert( document )
+		#Now this device is Unlocked.
+		conn.close()
+		self.write( {"DeviceAdded":True} )
+
+class OwnerIdQueryHandler( tornado.web.RequestHandler ):
+	def post( self ):		
+		conn = pymongo.Collection()
+		db = conn.wally
+		collection = db.userCollection
+		
 
 
 class MainHandler(tornado.web.RequestHandler):
@@ -93,6 +125,9 @@ application = tornado.web.Application([
 	(r"/ws", WebSocketHandler),
 	(r"/signUp/", SignUpHandler),
 	(r"/signIn/", SignInHandler),
+	(r"/user/dashboard/([^/]+)", UserDashboardHandler),
+	(r"/deviceAddPoint/", DeviceAddHandler),
+	(r"/ownerIdOf/", OwnerIdQueryHandler),
 ], debug=True, template_path='views')
 
 if __name__ == "__main__":
